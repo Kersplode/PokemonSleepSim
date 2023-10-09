@@ -6,11 +6,71 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Pokemon Sleep Calculator</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<style>
+		.parent{
+			display: inline-flex;
+			width: 100%;
+		}
+		.team{
+			width: 20pc;
+			height: 100px;
+			border-color: black;
+			border-width: 1px;
+			border-style: solid;
+		}
+
+		#team1{
+			background-color: white;
+		}
+		#team2{
+			background-color: lightgrey;
+		}
+		#team3{
+			background-color: white;
+		}
+		#team4{
+			background-color: lightgrey;
+		}
+		#team5{
+			background-color: white;
+		}
+		
+	</style>
   </head>
   <body>
-    <h1>Title</h1>
+    <h1>Pokemon Sleep Power Simulator</h1>
+	<p>Input the details of multiple pokemon to compare them, or see how they synergize as a team</p>
+		<div class="parent">
+			<div class="team" id="team1">
+				<label>Team Member 1:</label> 
+					<select class="teamPicklist">  
+					</select>
+			</div>
+			<div class="team" id="team2">
+				<label>Team Member 2:</label> 
+					<select class="teamPicklist">  
+					</select>
+			</div>
+				
+			<div class="team" id="team3">
+				<label>Team Member 3:</label> 
+					<select class="teamPicklist">  
+					</select>
+			</div>
+			<div class="team" id="team4">
+				<label>Team Member 4:</label> 
+					<select class="teamPicklist">  
+					</select>
+			</div>
+			<div class="team" id="team5">
+				<label>Team Member 5:</label> 
+					<select class="teamPicklist">  
+					</select>
+			</div>
+		</div>
     <canvas id="myChart" width="200" height="100"></canvas>
 		<canvas id="myChart2" width="200" height="100"></canvas>
+
     <script>
 	  const team=[];
 	  
@@ -49,6 +109,7 @@
 	   LargeLeek : false,
 	   SlowpokeTail : false,
 	}
+	  
 	  const berries = {
 	    Yache: 35,
 		Belue: 33,
@@ -71,7 +132,91 @@
 	  };
 	  
 	  const natures = {
-	  
+		Lonely: { 
+			SpeedOfHelp : .9,
+			EnergyRecovery :  .8,
+		},
+		Adamant: { 
+			SpeedOfHelp : .9,
+			IngredientFinding :  .8,
+		},
+		Naughty: { 
+			SpeedOfHelp : .9,
+			IngredientFinding :  .8,
+		},
+		Brave: { 
+			SpeedOfHelp : .9,
+			EXPGains :  .82,
+		},
+		Bold: { 
+			EnergyRecovery :  1.2,
+			SpeedOfHelp : 1.1,
+		},
+		Impish: { 
+			EnergyRecovery :  1.2,
+			IngredientFinding :  .8,
+		},
+		Lax: { 
+			EnergyRecovery :  1.2,
+			MainSkillChance :  .8,
+		},
+		Relaxed: { 
+			EnergyRecovery :  1.2,
+			EXPGains :  .82,
+		},
+		Modest: { 
+			IngredientFinding :  1.2,
+			SpeedOfHelp : 1.1,
+		},
+		Mild: { 
+			IngredientFinding :  1.2,
+			EnergyRecovery :  .8,
+		},
+		Rash: { 
+			IngredientFinding :  1.2,
+			MainSkillChance :  .8,
+		},
+		Quiet: { 
+			IngredientFinding :  1.2,
+			EXPGains :  .82,
+		},
+		Calm: { 
+			MainSkillChance :  1.2,
+			SpeedOfHelp : 1.1,
+		},
+		Gentle: { 
+			MainSkillChance :  1.2,
+			EnergyRecovery :  .8,
+		},
+		Careful: { 
+			MainSkillChance :  1.2,
+			IngredientFinding :  .8,
+		},
+		Sassy: { 
+			MainSkillChance :  1.2,
+			EXPGains :  .82,
+		},
+		Timid: { 
+			EXPGains :  1.18,
+			SpeedOfHelp : 1.1,
+		},
+		Hasty: { 
+			EXPGains :  1.18,
+			EnergyRecovery :  .8,
+		},
+		Jolly: { 
+			EXPGains :  1.18,
+			IngredientFinding :  .8,
+		},
+		Naive: { 
+			EXPGains :  1.18,
+			MainSkillChance :  .8,
+		},
+		Bashful: {},
+		Docile: {},
+		Hardy: {},
+		Serious: {},
+		Quirky: {},
 	  }
 	  
 	  const mainSkills = {
@@ -163,7 +308,7 @@
 		  berry: berries['Grepa'],
 		  frequency: 4300,
 		  mainSkill: "ChargeStrengthS",
-		  evolvesTo: "Raichu",
+		  evolvesTo: "Pikachu",
 		  finalEvolution: "Raichu",
 		  ingredients: {
 			L0 : {FancyApple:1},
@@ -200,7 +345,7 @@
 			}
 		  },
 		},
-		  "Raichu" : {
+		"Raichu" : {
 		  name: "Raichu",
 		  specialty: "Berries",
 		  color: "gold",
@@ -221,11 +366,98 @@
 			}
 		  },
 		},
+		"Igglybuff" : {
+		  name: "Igglybuff",
+		  specialty: "Skills",
+		  color: "pink",
+		  berry: berries['Pecha'],
+		  frequency: 5200,
+		  mainSkill: "EnergyForEveryone",
+		  evolvesTo: "Jigglypuff",
+		  finalEvolution: "Wigglytuff",
+		  ingredients: {
+			L0 : {Honey:1},
+			L30: {
+			  Honey:2,
+			  PureOil:2
+			},
+			L60: {
+			  Honey:4,
+			  PureOil:3,
+			  SoothingCacao:2,
+			}
+		  },
+		},
+		"Jigglypuff" : {
+		  name: "Jigglypuff",
+		  specialty: "Skills",
+		  color: "pink",
+		  berry: berries['Pecha'],
+		  frequency: 3900,
+		  mainSkill: "EnergyForEveryone",
+		  evolvesTo: "Wigglytuff",
+		  finalEvolution: "Wigglytuff",
+		  ingredients: {
+			L0 : {Honey:1},
+			L30: {
+			  Honey:2,
+			  PureOil:2
+			},
+			L60: {
+			  Honey:4,
+			  PureOil:3,
+			  SoothingCacao:2,
+			}
+		  },
+		},
+		"Wigglytuff" : {
+		  name: "Wigglybuff",
+		  specialty: "Skills",
+		  color: "pink",
+		  berry: berries['Pecha'],
+		  frequency: 2900,
+		  mainSkill: "EnergyForEveryone",
+		  finalEvolution: "Wigglybuff",
+		  ingredients: {
+			L0 : {Honey:1},
+			L30: {
+			  Honey:2,
+			  PureOil:2
+			},
+			L60: {
+			  Honey:4,
+			  PureOil:3,
+			  SoothingCacao:2,
+			}
+		  },
+		},
+
 	  };
+	  
+	  
+	  function createOption(option, label) {
+		  var option = document.createElement("option");
+		  option.setAttribute("value", option);
+		  option.innerHTML = label;
+		  return option;
+	  }
+	  
+	function buildDropDowns() {
+		var selections = document.getElementsByClassName('teamPicklist');
+		console.log(selections);
+		for(var i=0; i<selections.length; i++) {
+
+		  for(j in pokemon) {
+			selections[i].options.add(createOption(pokemon[j]["name"], pokemon[j]['name']));
+		  }
+		}
+	}
+	  buildDropDowns();
+	  
 	  var bedTime = 60*60*16;
 	  var sleeping = false;
 	  var wakeTime = 60*60*24;
-	  
+	  var teamSlot = 1;
 	  //TODO Cooking Pot Size
 	  
 	  //TODO Implement Ingredient Bag
@@ -239,6 +471,9 @@
 		//Figure out a way to Maximize
 		this.name = pokemonName.name;
 		this.level = level;
+		this.teamSlot = teamSlot;
+		teamSlot += 1;
+		this.nature = nature;
 		this.specialty = pokemonName.specialty;
 		this.mainSkill = pokemonName.mainSkill;
 		this.mainSkillLevel = mainSkillLevel
@@ -261,8 +496,14 @@
 		this.resourcesFromSkills = 0;
 		this.resourcesFromBerries = 0;
 		this.resourcesFromIngredients = 0;
-		this.adjustEnergy = function(energyChange){
-			this.energy += energyChange;
+		//The tick parameter should only be provided by the -1 energy every 10 minutes feature. 
+		this.adjustEnergy = function(energyChange, tick){
+			let natureEnergyMod = this.nature['EnergyRecovery'] || 1;
+			if (tick) { 
+				natureEnergyMod = 1;
+			};
+						
+			this.energy += energyChange * natureEnergyMod;
 			if(this.energy < 0){
 			  this.energy = 0;
 			}
@@ -292,9 +533,12 @@
 			this.grossResources += helpPower;
 			
 			let skillCheck = Math.random() *100;
+			let natureSkillMod = this.nature['MainSkillChance'] || 1;
+			//TODO: subSkill skill weights
+			let subSkillSkillMod = false || 1;
 			// x% chance to hit skill
 			//Overnight, skills will stall once they trigger once and will not reset til you wake up.
-			if (skillCheck < 20 || this.skillStalled == true){
+			if (skillCheck < 20*natureSkillMod*subSkillSkillMod || this.skillStalled == true){
 				//Since the skills don't actually trigger til morning, this saves your success until then
 				//This is especially important so that your energy overcaps in the morning for energy skills
 				if (sleeping) {
@@ -441,20 +685,27 @@
 		  return hoursT + " :" + minutesT + " : " + secondsT ;
 		}
 
-    	new makePokemon(pokemon["Blastoise"], 100, "bashful", "SoothingCacao","SoothingCacao",1);
-		new makePokemon(pokemon["Raichu"], 100, "bashful", "WarmingGinger", "FancyEgg",1);
-		new makePokemon(pokemon["Wartortle"], 100, "bashful", "SoothingCacao","SoothingCacao",1);
-		new makePokemon(pokemon["Pikachu"], 100, "bashful", "FancyApple", "FancyApple",1);
-		new makePokemon(pokemon["Raichu"], 100, "bashful", "WarmingGinger","FancyEgg",1)
-		
-		
-		//new makePokemon(pokemon["Pichu"], 29, "bashful", "WarmingGinger", "FancyEgg",1);
+	function makeTeam(){
+	
+	    new makePokemon(pokemon["Blastoise"], 15, natures["Bashful"], "SoothingCacao","SoothingCacao",2);
+		new makePokemon(pokemon["Wartortle"], 15, natures["Relaxed"], "MoomooMilk", "MoomooMilk",1);
+		//new makePokemon(pokemon["Wartortle"], 15, natures["Bashful"], "MoomooMilk","MoomooMilk",1);
+		new makePokemon(pokemon["Raichu"], 15, natures["Bashful"], "FancyApple", "FancyApple",1);
+		new makePokemon(pokemon["Raichu"], 15, natures["Bashful"], "FancyApple", "FancyApple",2);
+		new makePokemon(pokemon["Wigglytuff"], 15, natures["Bashful"], "Honey", "Honey",1)
+		//new makePokemon(pokemon["Pichu"], 60, natures["Bashful"], "FancyApple", "FancyApple",1);
+	
+	}
+	
+	makeTeam();
 		
 
 
       const time = [];
       const energy = [];
 	  const resources = [];
+	  
+	  //Makes chart data holders for each team member (allows for under- or over-simming)
 	  for (i in team){
 	    energy.push([]);
 		resources.push([]);
@@ -465,7 +716,7 @@
 	  const runDays = 7;
 	  const runTil = 60*60*24*runDays;
 	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
-	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours, 86400 = 1 day. 
+	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours, 21600 = 6 hours, 86400 = 1 day. 
 		const updateRate = 3600;	
 		
 
@@ -483,11 +734,11 @@
 			  var teamPlace = team.indexOf(team[i]);
 			  
 			  if (seconds == team[i].nextHelpTime){
-				  let energyFactor = Math.min(team[i].energy, 1.5);
-			      let nextHelpDelay = Math.round(team[i].frequency / (1+(1.5*energyFactor/100))*(1-((team[i].level)-1)/500));
-				  
+				  let energyFactor = 1/(1+Math.min(1.5*(team[i].energy/100), 1.5));
+				  let levelFactor = (1-((team[i].level)-1)/500);
+			      let nextHelpDelay = team[i].frequency*levelFactor*energyFactor;
+				  nextHelpDelay = Math.round(nextHelpDelay);
 				  team[i].nextHelpTime = team[i].nextHelpTime + nextHelpDelay;
-				  //console.log(team[i].name + teamPlace+" will help in " + nextHelpDelay + ' sec, at '+team[i].nextHelpTime);
 				  team[i].help();
 			  }
 
@@ -498,7 +749,7 @@
 				
 			  }
 			  //reduce energy by 1 every 10 minutes
-			  if(seconds > 0 && seconds % 600 == 0) {team[i].adjustEnergy(-1);};
+			  if(seconds > 0 && seconds % 600 == 0) {team[i].adjustEnergy(-1,true);};
 			  
 			  //Log enegy and resources values once per team member
 			  if(seconds % (updateRate) == 0 ){ 
@@ -528,48 +779,61 @@
 
 	 buildData();
 	 
-	 for(i in team){
-		 var teamPlace = team.indexOf(team[i]);
-		 myChart.data.datasets.push({
-			 label: team[i].name+' Energy',
-			 data: energy[teamPlace],
-			 fill: false,
-			 borderColor: team[i].color,
-			 backgroundColor: team[i].color,
-			 borderWidth: 1,
-			 pointRadius: 0,
+	 function pushDataToCharts() {
+		 for(i in team){
+			 var teamPlace = team.indexOf(team[i]);
+			 myChart.data.datasets.push({
+				 label: team[i].name+team[i].teamSlot+' Energy',
+				 data: energy[teamPlace],
+				 fill: false,
+				 borderColor: team[i].color,
+				 backgroundColor: team[i].color,
+				 borderWidth: 1,
+				 pointRadius: 0,
 
-		});
-		myChart2.data.datasets.push({
-		  	 label: team[i].name+' Power',
-			 data: resources[teamPlace],
-			 fill: false,
-			 borderColor: team[i].color,
-			 backgroundColor: team[i].color,
-			 borderWidth: 1,
-			 pointRadius: 0,
+			});
+			myChart2.data.datasets.push({
+				 label: team[i].name+team[i].teamSlot+' Power',
+				 data: resources[teamPlace],
+				 fill: false,
+				 borderColor: team[i].color,
+				 backgroundColor: team[i].color,
+				 borderWidth: 1,
+				 pointRadius: 0,
 
-		})
-	
-	}
-	
+			})
+		
+		}
 	myChart.data.labels = time;
 	myChart2.data.labels = time;
 	myChart.update();
-	myChart2.update();
+	myChart2.update();	
+	};
 	
+	function resetCharts() {
+		myChart.data.labels = [];
+		myChart2.data.labels = [];
+		myChart.data.datasets = [];
+		myChart2.data.datasets = [];
+		myChart.update();
+		myChart2.update();
+	};
+
 	var totalResources = 0;
 		
 	for(i in team){
-		console.log(team[i].name+':\t'+team[i].resourcesFromBerries+'b\t'+team[i].resourcesFromIngredients+'i\t'+team[i].resourcesFromSkills+'s\t'+team[i].grossResources);
+		console.log(team[i].name+team[i].teamSlot+':\t'+team[i].resourcesFromBerries+'b\t'+team[i].resourcesFromIngredients+'i\t'+team[i].resourcesFromSkills+'s\t'+team[i].grossResources);
 		totalResources += team[i].grossResources;
 	}
 	
-	console.log((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources));
+	console.log(totalResources);
 	
 	console.log(Math.round(totalResources/runDays) + " power per day. "+ Math.round(totalResources/runDays)*7+" power per week.");
 	
-	console.log("need to spend "+(ingredientBag/runDays)/3+" ingredients per meal. Does not account for Sundays.");
+	console.log("need to spend "+Math.round((ingredientBag/runDays)/3)+" ingredients per meal. Does not account for Sundays.");
+	
+	pushDataToCharts();
+	
     </script>
   </body>
 </html>
