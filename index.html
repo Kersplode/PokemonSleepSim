@@ -9,8 +9,8 @@
   </head>
   <body>
     <h1>Title</h1>
-    <canvas id="myChart" width="400" height="100"></canvas>
-		<canvas id="myChart2" width="400" height="100"></canvas>
+    <canvas id="myChart" width="200" height="100"></canvas>
+		<canvas id="myChart2" width="200" height="100"></canvas>
     <script>
 	  const team=[];
 	  
@@ -96,7 +96,7 @@
 		  specialty: "Ingredients",
 		  color: "blue",
 		  berry: berries['Oran'],
-		  frequency: 2000,
+		  frequency: 4500,
 		  mainSkill: "IngredientMagnetS",
 		  evolvesTo: "Wartortle",
 		  finalEvolution: "Blastoise",
@@ -118,7 +118,7 @@
 		  specialty: "Ingredients",
 		  color: "blue",
 		  berry: berries['Oran'],
-		  frequency: 1500,
+		  frequency: 3400,
 		  mainSkill: "IngredientMagnetS",
 		  evolvesTo: "Blastoise",
 		  finalEvolution: "Blastoise",
@@ -140,7 +140,7 @@
 		  specialty: "Ingredients",
 		  color: "blue",
 		  berry: berries['Oran'],
-		  frequency: 1000,
+		  frequency: 2800,
 		  mainSkill: "IngredientMagnetS",
 		  finalEvolution: "Blastoise",
 		  ingredients: {
@@ -156,12 +156,34 @@
 			}
 		  },
 		},
+		"Pichu" : {
+		  name: "Pichu",
+		  specialty: "Berries",
+		  color: "gold",
+		  berry: berries['Grepa'],
+		  frequency: 4300,
+		  mainSkill: "ChargeStrengthS",
+		  evolvesTo: "Raichu",
+		  finalEvolution: "Raichu",
+		  ingredients: {
+			L0 : {FancyApple:1},
+			L30: {
+			  FancyApple:2,
+			  WarmingGinger:2
+			},
+			L60: {
+			  FancyApple:4,
+			  WarmingGinger:3,
+			  FancyEgg:3,
+			}
+		  },
+		},
 		"Pikachu" : {
 		  name: "Pikachu",
 		  specialty: "Berries",
 		  color: "gold",
 		  berry: berries['Grepa'],
-		  frequency: 1200,
+		  frequency: 2700,
 		  mainSkill: "ChargeStrengthS",
 		  evolvesTo: "Raichu",
 		  finalEvolution: "Raichu",
@@ -183,7 +205,7 @@
 		  specialty: "Berries",
 		  color: "gold",
 		  berry: berries['Grepa'],
-		  frequency: 800,
+		  frequency: 2200,
 		  mainSkill: "ChargeStrengthS",
 		  finalEvolution: "Raichu",
 		  ingredients: {
@@ -203,6 +225,15 @@
 	  var bedTime = 60*60*16;
 	  var sleeping = false;
 	  var wakeTime = 60*60*24;
+	  
+	  //TODO Cooking Pot Size
+	  
+	  //TODO Implement Ingredient Bag
+	  var ingredientBag = 0;
+	  //TODO Implement cooking
+	  //  Spend as late as possible (11:59am, 5:59pm, 11:59pm?)
+	  //  Figure out the most powerful recipe available
+	  //  cap out power with weaker ingredients? 
 	  
 	  function makePokemon(pokemonName,level,nature,level30ing,level60ing,mainSkillLevel,sub1,sub2,sub3,sub4,sub5){
 		//Figure out a way to Maximize
@@ -255,6 +286,8 @@
 			   let countOfIng = this.ingredients[tierPick][nameOfIng];
 			   helpPower = ingredients[nameOfIng]*countOfIng;
 			   this.resourcesFromIngredients += helpPower;
+			   //REMINDER: Remove this once you make a real bag/pot. 
+				ingredientBag += countOfIng;
 			}
 			this.grossResources += helpPower;
 			
@@ -317,6 +350,8 @@
 								}
 								this.grossResources += ingredients[Object.keys(ingMagPool)[ingMagnetPull]];
 								this.resourcesFromSkills += ingredients[Object.keys(ingMagPool)[ingMagnetPull]];
+								//REMINDER: Remove this once you make a real bag/pot. 
+								ingredientBag += 1; 
 							}
 							//TODO
 							break;
@@ -406,24 +441,34 @@
 		  return hoursT + " :" + minutesT + " : " + secondsT ;
 		}
 
+    	new makePokemon(pokemon["Blastoise"], 100, "bashful", "SoothingCacao","SoothingCacao",1);
+		new makePokemon(pokemon["Raichu"], 100, "bashful", "WarmingGinger", "FancyEgg",1);
+		new makePokemon(pokemon["Wartortle"], 100, "bashful", "SoothingCacao","SoothingCacao",1);
+		new makePokemon(pokemon["Pikachu"], 100, "bashful", "FancyApple", "FancyApple",1);
+		new makePokemon(pokemon["Raichu"], 100, "bashful", "WarmingGinger","FancyEgg",1)
+		
+		
+		//new makePokemon(pokemon["Pichu"], 29, "bashful", "WarmingGinger", "FancyEgg",1);
+		
+
 
       const time = [];
-      const energy = [[],[],[],[],[]];
-	  const resources = [[],[],[],[],[]]
+      const energy = [];
+	  const resources = [];
+	  for (i in team){
+	    energy.push([]);
+		resources.push([]);
+	  }
+	  
 	  
 	  //TODO:replace all this junk with dropdowns
 	  const runDays = 7;
 	  const runTil = 60*60*24*runDays;
 	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
-	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours
-		const updateRate = 60;	
+	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours, 86400 = 1 day. 
+		const updateRate = 3600;	
 		
-	  new makePokemon(pokemon["Blastoise"], 1, "bashful", "SoothingCacao","SoothingCacao",1);
-		new makePokemon(pokemon["Squirtle"], 1, "bashful", "SoothingCacao","BeanSausage",1);
-		new makePokemon(pokemon["Wartortle"], 1, "bashful", "MoomooMilk","MoomooMilk",1);		
-		new makePokemon(pokemon["Pikachu"], 1, "bashful", "FancyApple", "FancyApple",1);
-		new makePokemon(pokemon["Raichu"], 1, "bashful", "WarmingGinger", "FancyEgg",1);
-		
+
       function buildData() {
 
 		
@@ -439,7 +484,7 @@
 			  
 			  if (seconds == team[i].nextHelpTime){
 				  let energyFactor = Math.min(team[i].energy, 1.5);
-			      let nextHelpDelay = Math.round(team[i].frequency / (1+(1.5*energyFactor/100)));
+			      let nextHelpDelay = Math.round(team[i].frequency / (1+(1.5*energyFactor/100))*(1-((team[i].level)-1)/500));
 				  
 				  team[i].nextHelpTime = team[i].nextHelpTime + nextHelpDelay;
 				  //console.log(team[i].name + teamPlace+" will help in " + nextHelpDelay + ' sec, at '+team[i].nextHelpTime);
@@ -496,7 +541,7 @@
 
 		});
 		myChart2.data.datasets.push({
-		  	 label: team[i].name+' Resources',
+		  	 label: team[i].name+' Power',
 			 data: resources[teamPlace],
 			 fill: false,
 			 borderColor: team[i].color,
@@ -513,13 +558,18 @@
 	myChart.update();
 	myChart2.update();
 	
+	var totalResources = 0;
+		
 	for(i in team){
-		console.log(team[i].name+':\t'+team[i].resourcesFromBerries+':\t'+team[i].resourcesFromIngredients+':\t'+team[i].resourcesFromSkills+':\t'+team[i].grossResources);
+		console.log(team[i].name+':\t'+team[i].resourcesFromBerries+'b\t'+team[i].resourcesFromIngredients+'i\t'+team[i].resourcesFromSkills+'s\t'+team[i].grossResources);
+		totalResources += team[i].grossResources;
 	}
 	
 	console.log((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources));
 	
-	console.log(Math.round((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources)/runDays) + " resources per day");
+	console.log(Math.round(totalResources/runDays) + " power per day. "+ Math.round(totalResources/runDays)*7+" power per week.");
+	
+	console.log("need to spend "+(ingredientBag/runDays)/3+" ingredients per meal. Does not account for Sundays.");
     </script>
   </body>
 </html>
