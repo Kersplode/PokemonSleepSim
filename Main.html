@@ -10,7 +10,7 @@
   <body>
     <h1>Title</h1>
     <canvas id="myChart" width="400" height="100"></canvas>
-		<canvas id="myChart2" width="400" height="250"></canvas>
+		<canvas id="myChart2" width="400" height="100"></canvas>
     <script>
 	  const team=[];
 	  
@@ -32,6 +32,23 @@
 	   SlowpokeTail : 342,
 	  };
 	  
+	const ingMagPool = {
+	   FancyApple : true,
+	   MoomooMilk : true,
+	   GreengrassSoybeans : false,
+	   Honey : true,
+	   BeanSausage : true,
+	   WarmingGinger : true,
+	   SnoozyTomato : true,
+	   FancyEgg : true,
+	   PureOil : true,
+	   SoftPotato : false,
+	   FieryHerb : true,
+	   SoothingCacao : true,
+	   TastyMushroom : false,
+	   LargeLeek : false,
+	   SlowpokeTail : false,
+	}
 	  const berries = {
 	    Yache: 35,
 		Belue: 33,
@@ -58,7 +75,19 @@
 	  }
 	  
 	  const mainSkills = {
-	  
+		EnergyForEveryone : [5,7,9,11,15,18],
+		ChargeEnergyS : [12,16,21,27,34,43],
+		ChargeStrengthS : [400,569,785,1083,1496,2066],
+		ChargeStrengthM : [880,1251,1726,2383,3290,4546],
+		ChargeStrengthSVar : [500,711.5,981.5,1354,1870,2582.5],
+		CookingPowerUpS : [7,10,12,17,22,27],
+		DreamShardMagnetS : [88,125,173,274,395,568],
+		DreamShardMagnetSVar : [110,156.5,216.5,342.5,494,710],
+		EnergizingCheerS : [14,17,23,29,38,51],
+		ExtraHelpfulS : [5,7,9,11,15,18],
+		IngredientMagnetS : [4,5,6,7,8,9],
+		Metronome : [],
+		
 	  }
 	  
 	  const pokemon	= {
@@ -68,7 +97,7 @@
 		  color: "blue",
 		  berry: berries['Oran'],
 		  frequency: 2000,
-		  mainSkill: "Ingredient Magnet S",
+		  mainSkill: "IngredientMagnetS",
 		  evolvesTo: "Wartortle",
 		  finalEvolution: "Blastoise",
 		  ingredients: {
@@ -90,7 +119,7 @@
 		  color: "blue",
 		  berry: berries['Oran'],
 		  frequency: 1500,
-		  mainSkill: "Ingredient Magnet S",
+		  mainSkill: "IngredientMagnetS",
 		  evolvesTo: "Blastoise",
 		  finalEvolution: "Blastoise",
 		  ingredients: {
@@ -112,7 +141,7 @@
 		  color: "blue",
 		  berry: berries['Oran'],
 		  frequency: 1000,
-		  mainSkill: "Energy for Everyone S",
+		  mainSkill: "IngredientMagnetS",
 		  finalEvolution: "Blastoise",
 		  ingredients: {
 			L0 : {MoomooMilk:2},
@@ -133,7 +162,7 @@
 		  color: "gold",
 		  berry: berries['Grepa'],
 		  frequency: 1200,
-		  mainSkill: "Charge Strength S",
+		  mainSkill: "ChargeStrengthS",
 		  evolvesTo: "Raichu",
 		  finalEvolution: "Raichu",
 		  ingredients: {
@@ -155,7 +184,7 @@
 		  color: "gold",
 		  berry: berries['Grepa'],
 		  frequency: 800,
-		  mainSkill: "Charge Strength S",
+		  mainSkill: "ChargeStrengthS",
 		  finalEvolution: "Raichu",
 		  ingredients: {
 			L0 : {FancyApple:1},
@@ -198,6 +227,9 @@
 		this.nextHelpTime = 10;
 		this.frequency = pokemonName.frequency;
 		this.skillStalled = false;
+		this.resourcesFromSkills = 0;
+		this.resourcesFromBerries = 0;
+		this.resourcesFromIngredients = 0;
 		this.adjustEnergy = function(energyChange){
 			this.energy += energyChange;
 			if(this.energy < 0){
@@ -216,17 +248,20 @@
 				if (this.specialty == "Berries"){
 					helpPower += this.berry+this.level;
 				}
+				this.resourcesFromBerries += helpPower;
 			} else {
 			   let tierPick = this.tierPool[Math.floor(Math.random() * this.tierPool.length)];
 			   let nameOfIng = Object.keys(this.ingredients[tierPick])[0];
 			   let countOfIng = this.ingredients[tierPick][nameOfIng];
 			   helpPower = ingredients[nameOfIng]*countOfIng;
+			   this.resourcesFromIngredients += helpPower;
 			}
 			this.grossResources += helpPower;
+			
 			let skillCheck = Math.random() *100;
-			//10% chance to hit skill
+			// x% chance to hit skill
 			//Overnight, skills will stall once they trigger once and will not reset til you wake up.
-			if (skillCheck < 5 || this.skillStalled == true){
+			if (skillCheck < 20 || this.skillStalled == true){
 				//Since the skills don't actually trigger til morning, this saves your success until then
 				//This is especially important so that your energy overcaps in the morning for energy skills
 				if (sleeping) {
@@ -234,24 +269,62 @@
 					
 				} else {
 					this.skillStalled = false;
-					//TODO Charge Energy S
-					//TODO Charge Strength S
-					//TODO Charge Strength M*
-					//TODO Charge Strength S - Var
-					//TODO Cooking Power-Up S*
-					//TODO Dream Shard Magnet S*
-					//TODO Dream Shard Magnet S - Var*
-					//TODO Energizing Cheer S*
-					//TODO Energy for Everyone S*
-					if (this.mainSkill == 'Energy for Everyone S'){
-						let skillLevels= [5,7,9,11,15,18]
-						for(i in team){
-							team[i].adjustEnergy(skillLevels[mainSkillLevel-1]);
-						}
-					}
-				//TODO Extra Helpful S*
-				//TODO Ingredient Magnet S
-				//TODO Metronome
+					switch(this.mainSkill) {
+						case 'EnergyForEveryone' :
+							for(i in team){
+								team[i].adjustEnergy(mainSkills[this.mainSkill][this.mainSkillLevel-1]);
+							}
+							break;
+						case'ChargeEnergyS':
+							//TODO
+							break;
+						case'ChargeStrengthS':
+							this.grossResources += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							this.resourcesFromSkills += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							break;
+						case'ChargeStrengthM':
+							this.grossResources += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							this.resourcesFromSkills += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							//TODO
+							break;
+						case'ChargeStrengthSVar':
+							this.grossResources += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							this.resourcesFromSkills += mainSkills[this.mainSkill][this.mainSkillLevel-1];
+							//TODO
+							break;
+						case'CookingPower-UpS':
+							//TODO
+							break;
+						case'DreamShardMagnetS':
+							//TODO
+							break;
+						case'DreamShardMagnetSVar':
+							//TODO
+							break;
+						case'EnergizingCheerS':
+							//TODO
+							break;
+						case'ExtraHelpfulS':
+							//TODO
+							break;
+						case'IngredientMagnetS':
+
+							for (let i = 0; i < mainSkills[this.mainSkill][this.mainSkillLevel-1]; i++){
+								let ingMagnetPull = (Math.floor(Math.random() * Object.keys(ingMagPool).length));
+								//Makes sure you pick a valid ingredient from the pool
+								while (ingMagPool[Object.keys(ingMagPool)[ingMagnetPull]] === false) {
+									ingMagnetPull = (Math.floor(Math.random() * Object.keys(ingMagPool).length));
+								}
+								this.grossResources += ingredients[Object.keys(ingMagPool)[ingMagnetPull]];
+								this.resourcesFromSkills += ingredients[Object.keys(ingMagPool)[ingMagnetPull]];
+							}
+							//TODO
+							break;
+						case'Metronome':
+							//TODO
+							break;
+
+					}	
 				};
 				
 				
@@ -325,28 +398,34 @@
 		}
 	  });
 	  
+	  
+	  function intToTime(secondsT) {
+		  var hoursT = Math.floor(secondsT / 3600);
+		  var minutesT = Math.floor((secondsT % 3600) / 60);
+		  var secondsT = secondsT % 60;
+		  return hoursT + " :" + minutesT + " : " + secondsT ;
+		}
 
 
       const time = [];
       const energy = [[],[],[],[],[]];
 	  const resources = [[],[],[],[],[]]
-	  const runDays = 6+(2/3);
+	  
+	  //TODO:replace all this junk with dropdowns
+	  const runDays = 7;
 	  const runTil = 60*60*24*runDays;
 	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
-	   //300 = .5 hours, 600 = 1 hour, 2400 = 4 hours.
-		const updateRate = 2400;	
-	  new makePokemon(pokemon["Blastoise"], 60, "bashful", "SoothingCacao","SoothingCacao",6);
-		new makePokemon(pokemon["Squirtle"], 60, "bashful", "SoothingCacao","BeanSausage",1);
-		new makePokemon(pokemon["Wartortle"], 60, "bashful", "MoomooMilk","MoomooMilk",1);		
-		new makePokemon(pokemon["Pikachu"], 60, "bashful", "FancyApple", "FancyApple",1);
-		new makePokemon(pokemon["Raichu"], 60, "bashful", "WarmingGinger", "FancyEgg",1);
+	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours
+		const updateRate = 60;	
+		
+	  new makePokemon(pokemon["Blastoise"], 1, "bashful", "SoothingCacao","SoothingCacao",1);
+		new makePokemon(pokemon["Squirtle"], 1, "bashful", "SoothingCacao","BeanSausage",1);
+		new makePokemon(pokemon["Wartortle"], 1, "bashful", "MoomooMilk","MoomooMilk",1);		
+		new makePokemon(pokemon["Pikachu"], 1, "bashful", "FancyApple", "FancyApple",1);
+		new makePokemon(pokemon["Raichu"], 1, "bashful", "WarmingGinger", "FancyEgg",1);
+		
       function buildData() {
 
-		
-		//TODO: Replace this with in-browser dropdowns
-		
-
-		//Run for a full week
 		
 
 		var seconds = 0;
@@ -384,7 +463,10 @@
 			  }			  
 			}
 			//Only log time axis increment once per whole time
-			if(seconds % (updateRate) == 0 ){ time.push(parseInt(seconds));};
+			if(seconds % (updateRate) == 0 ){ 
+				time.push(intToTime(seconds));
+				//console.log(seconds+" "+intToTime(seconds));
+			};
 			if(seconds == bedTime) {
 				sleeping = true;
 				bedTime = bedTime + (60*60*24);				
@@ -430,7 +512,12 @@
 	myChart2.data.labels = time;
 	myChart.update();
 	myChart2.update();
-	console.log(team[0].name+":\t"+team[0].grossResources +"\n"+ team[1].name+":\t"+team[1].grossResources +"\n"+team[2].name+":\t"+team[2].grossResources+"\n"+team[3].name+":\t"+team[3].grossResources +"\n"+team[4].name+":\t"+team[4].grossResources +"\n="+ (team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources));
+	
+	for(i in team){
+		console.log(team[i].name+':\t'+team[i].resourcesFromBerries+':\t'+team[i].resourcesFromIngredients+':\t'+team[i].resourcesFromSkills+':\t'+team[i].grossResources);
+	}
+	
+	console.log((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources));
 	
 	console.log(Math.round((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources)/runDays) + " resources per day");
     </script>
