@@ -18,6 +18,14 @@
 			border-width: 1px;
 			border-style: solid;
 		}
+		.options{
+			width: 20pc;
+			height: 40px;
+			border-color: black;
+			border-width: 1px;
+			border-style: solid;
+		}
+		
 
 		#team1{
 			background-color: white;
@@ -34,7 +42,9 @@
 		#team5{
 			background-color: white;
 		}
-		
+		#runButton{
+			width: 100%;
+		}
 	</style>
   </head>
   <body>
@@ -43,36 +53,78 @@
 		<div class="parent">
 			<div class="team" id="team1">
 				<label>Team Member 1:</label> 
-					<select class="teamPicklist">  
+					<select class="teamPicklist" id="teamP1">  
 					</select>
 			</div>
 			<div class="team" id="team2">
 				<label>Team Member 2:</label> 
-					<select class="teamPicklist">  
+					<select class="teamPicklist" id="teamP2">  
 					</select>
 			</div>
 				
 			<div class="team" id="team3">
 				<label>Team Member 3:</label> 
-					<select class="teamPicklist">  
+					<select class="teamPicklist" id="teamP3">  
 					</select>
 			</div>
 			<div class="team" id="team4">
 				<label>Team Member 4:</label> 
-					<select class="teamPicklist">  
+					<select class="teamPicklist" id="teamP4">  
 					</select>
 			</div>
 			<div class="team" id="team5">
 				<label>Team Member 5:</label> 
-					<select class="teamPicklist">  
+					<select class="teamPicklist" id="teamP5">  
 					</select>
 			</div>
 		</div>
+		<div class="parent">
+			<div class="options" id="opt1">
+				<label>TBD:</label> 
+					<select class="optionPicklist" id="optP1">  
+					<option value="TBD">TBD</option>
+					</select>
+			</div>
+			<div class="options" id="opt2">
+				<label>Days:</label> 
+					<select class="optionPicklist" id="optP2"> 
+						<option value="1">1</option>
+						<option value="7" selected="selected">7</option>
+						<option value="28">28</option>
+						<option value="52">52</option>
+						<option value="1000">1000!</option>
+					</select>
+			</div>
+				
+			<div class="options" id="opt3">
+				<label>Graph Details Level:</label> 
+					<select class="optionPicklist" id="optP3">  
+						<option value="1">Every second (TROUBLESHOOTING ONLY)</option>
+						<option value="60" selected="selected">Every minute</option>
+						<option value="600">Every 10 minutes</option>
+						<option value="3600" selected='selected'>Every hour</option>
+						<option value="14400">Every 4 hours</option>
+						<option value="86400">Every day (energy graph breaks)(fastest)</option>
+					</select>
+			</div>
+			<div class="options" id="opt4">
+				<label>Maximize:</label> 
+					<select class="optionPicklist" id="optP4">  
+					</select>
+			</div>
+			<div class="options" id="opt5">
+				<label>Option 5:</label> 
+					<select class="optionPicklist" id="optP5">  
+					</select>
+			</div>
+		</div>
+		<input type="button" id='runButton' value="Run!">
+		<p/>
     <canvas id="myChart" width="200" height="100"></canvas>
 		<canvas id="myChart2" width="200" height="100"></canvas>
 
     <script>
-	  const team=[];
+	  var team=[];
 	  
 	  const ingredients = {
 	   FancyApple : 90,
@@ -369,7 +421,7 @@
 		"Igglybuff" : {
 		  name: "Igglybuff",
 		  specialty: "Skills",
-		  color: "pink",
+		  color: "magenta",
 		  berry: berries['Pecha'],
 		  frequency: 5200,
 		  mainSkill: "EnergyForEveryone",
@@ -391,7 +443,7 @@
 		"Jigglypuff" : {
 		  name: "Jigglypuff",
 		  specialty: "Skills",
-		  color: "pink",
+		  color: "magenta",
 		  berry: berries['Pecha'],
 		  frequency: 3900,
 		  mainSkill: "EnergyForEveryone",
@@ -411,13 +463,13 @@
 		  },
 		},
 		"Wigglytuff" : {
-		  name: "Wigglybuff",
+		  name: "Wigglytuff",
 		  specialty: "Skills",
-		  color: "pink",
+		  color: "magenta",
 		  berry: berries['Pecha'],
 		  frequency: 2900,
 		  mainSkill: "EnergyForEveryone",
-		  finalEvolution: "Wigglybuff",
+		  finalEvolution: "Wigglytuff",
 		  ingredients: {
 			L0 : {Honey:1},
 			L30: {
@@ -434,24 +486,24 @@
 
 	  };
 	  
-	  
+	  //Puts all the pokemon in the dropdowns
 	  function createOption(option, label) {
 		  var option = document.createElement("option");
-		  option.setAttribute("value", option);
+		  option.setAttribute("value", label);
 		  option.innerHTML = label;
 		  return option;
 	  }
-	  
-	function buildDropDowns() {
+	  function buildDropDowns() {
 		var selections = document.getElementsByClassName('teamPicklist');
 		console.log(selections);
 		for(var i=0; i<selections.length; i++) {
 
 		  for(j in pokemon) {
-			selections[i].options.add(createOption(pokemon[j]["name"], pokemon[j]['name']));
+			selections[i].options.add(createOption(JSON.stringify(pokemon[j]['name']), pokemon[j]['name']));
 		  }
 		}
 	}
+	  
 	  buildDropDowns();
 	  
 	  var bedTime = 60*60*16;
@@ -686,38 +738,41 @@
 		}
 
 	function makeTeam(){
-	
-	    new makePokemon(pokemon["Blastoise"], 15, natures["Bashful"], "SoothingCacao","SoothingCacao",2);
-		new makePokemon(pokemon["Wartortle"], 15, natures["Relaxed"], "MoomooMilk", "MoomooMilk",1);
-		//new makePokemon(pokemon["Wartortle"], 15, natures["Bashful"], "MoomooMilk","MoomooMilk",1);
-		new makePokemon(pokemon["Raichu"], 15, natures["Bashful"], "FancyApple", "FancyApple",1);
-		new makePokemon(pokemon["Raichu"], 15, natures["Bashful"], "FancyApple", "FancyApple",2);
-		new makePokemon(pokemon["Wigglytuff"], 15, natures["Bashful"], "Honey", "Honey",1)
-		//new makePokemon(pokemon["Pichu"], 60, natures["Bashful"], "FancyApple", "FancyApple",1);
-	
+		team = [];
+		teamSlot = 1;
+	    new makePokemon(pokemon[member1.options[member1.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
+		new makePokemon(pokemon[member1.options[member2.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
+		new makePokemon(pokemon[member1.options[member3.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
+		new makePokemon(pokemon[member1.options[member4.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
+		new makePokemon(pokemon[member1.options[member5.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6)
 	}
 	
-	makeTeam();
+      var time = [];
+      var energy = [];
+	  var resources = [];
+	  
+	var totalResources = 0;
 		
-
-
-      const time = [];
-      const energy = [];
-	  const resources = [];
-	  
-	  //Makes chart data holders for each team member (allows for under- or over-simming)
-	  for (i in team){
-	    energy.push([]);
-		resources.push([]);
-	  }
-	  
+	const runButton = document.getElementById('runButton');
+	const member1 = document.getElementById('teamP1');  
+	const member2 = document.getElementById('teamP2');  
+	const member3 = document.getElementById('teamP3');  
+	const member4 = document.getElementById('teamP4');  
+	const member5 = document.getElementById('teamP5');  
+	const opt1 = document.getElementById('optP1');  
+	const opt2 = document.getElementById('optP2');  
+	const opt3 = document.getElementById('optP3');  
+	const opt4 = document.getElementById('optP4');  
+	const opt5 = document.getElementById('optP5');  
+	
+	
 	  
 	  //TODO:replace all this junk with dropdowns
-	  const runDays = 7;
-	  const runTil = 60*60*24*runDays;
+	  var runDays = parseInt(opt2.options[opt2.selectedIndex].value);
+	  var runTil = 60*60*24*runDays;
 	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
 	   //1800 = .5 hours, 3600 = 1 hours, 14400 = 4 hours, 21600 = 6 hours, 86400 = 1 day. 
-		const updateRate = 3600;	
+		var updateRate = parseInt(opt3.options[opt3.selectedIndex].value);	
 		
 
       function buildData() {
@@ -776,8 +831,6 @@
 		
       }
 	  
-
-	 buildData();
 	 
 	 function pushDataToCharts() {
 		 for(i in team){
@@ -811,6 +864,10 @@
 	};
 	
 	function resetCharts() {
+		energy = [];
+		time = [];
+		resources = [];
+
 		myChart.data.labels = [];
 		myChart2.data.labels = [];
 		myChart.data.datasets = [];
@@ -819,20 +876,34 @@
 		myChart2.update();
 	};
 
-	var totalResources = 0;
-		
-	for(i in team){
-		console.log(team[i].name+team[i].teamSlot+':\t'+team[i].resourcesFromBerries+'b\t'+team[i].resourcesFromIngredients+'i\t'+team[i].resourcesFromSkills+'s\t'+team[i].grossResources);
-		totalResources += team[i].grossResources;
-	}
-	
-	console.log(totalResources);
-	
-	console.log(Math.round(totalResources/runDays) + " power per day. "+ Math.round(totalResources/runDays)*7+" power per week.");
-	
-	console.log("need to spend "+Math.round((ingredientBag/runDays)/3)+" ingredients per meal. Does not account for Sundays.");
-	
-	pushDataToCharts();
+
+
+	runButton.addEventListener('click', function(){
+		 bedTime = 60*60*16;
+	     sleeping = false;
+	     wakeTime = 60*60*24;
+	     teamSlot = 1;
+		 totalResources = 0;
+		 updateRate = parseInt(opt3.options[opt3.selectedIndex].value);
+		resetCharts();
+		makeTeam();
+		ingredientBag = 0;
+		runDays = parseInt(opt2.options[opt2.selectedIndex].value);
+		runTil = 60*60*24*runDays;
+		for (i in team){
+			energy.push([]);
+			resources.push([]);
+		}
+		buildData();
+		pushDataToCharts();
+		for(i in team){
+			console.log(team[i].name+team[i].teamSlot+':\t'+team[i].resourcesFromBerries+'b\t'+team[i].resourcesFromIngredients+'i\t'+team[i].resourcesFromSkills+'s\t'+team[i].grossResources);
+			totalResources += team[i].grossResources;
+		}
+		console.log(totalResources);
+		console.log(Math.round(totalResources/runDays) + " power per day. "+ Math.round(totalResources/runDays)*7+" power per week.");
+		console.log("need to spend "+Math.round((ingredientBag/runDays)/3)+" ingredients per meal. Does not account for Sundays.");
+	});
 	
     </script>
   </body>
