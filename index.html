@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Pokemon Sleep Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  </head>
+  <body>
+    <h1>Title</h1>
+    <canvas id="myChart" width="400" height="100"></canvas>
+		<canvas id="myChart2" width="400" height="250"></canvas>
+    <script>
+	  const team=[];
+	  
+	  const ingredients = {
+	   FancyApple : 90,
+	   MoomooMilk : 98,
+	   GreengrassSoybeans : 100,
+	   Honey : 101,
+	   BeanSausage : 103,
+	   WarmingGinger : 109,
+	   SnoozyTomato : 110,
+	   FancyEgg : 115,
+	   PureOil : 121,
+	   SoftPotato : 124,
+	   FieryHerb : 130,
+	   SoothingCacao : 151,
+	   TastyMushroom : 167,
+	   LargeLeek : 185,
+	   SlowpokeTail : 342,
+	  };
+	  
+	  const berries = {
+	    Yache: 35,
+		Belue: 33,
+		Rawst: 32,
+		Chesto : 32,
+		Wiki : 31,
+		Oran : 31,
+		Sitrus : 30,
+		Durin : 30,
+		Figy : 29,
+		Persim : 28,
+		Cheri : 27,
+		Leppa : 27,
+		Bluk : 26,
+		Mago : 26,
+		Pecha : 26,
+		Grepa : 25,
+		Lum : 24,
+		Pamtre : 24,	  
+	  };
+	  
+	  const natures = {
+	  
+	  }
+	  
+	  const mainSkills = {
+	  
+	  }
+	  
+	  const pokemon	= {
+		"Squirtle" : {
+		  name: "Squirtle",
+		  specialty: "Ingredients",
+		  color: "blue",
+		  berry: berries['Oran'],
+		  frequency: 2000,
+		  mainSkill: "Ingredient Magnet S",
+		  evolvesTo: "Wartortle",
+		  finalEvolution: "Blastoise",
+		  ingredients: {
+			L0 : {MoomooMilk:2},
+			L30: {
+			  MoomooMilk:5,
+			  SoothingCacao:3
+			},
+			L60: {
+			  MoomooMilk:7,
+			  SoothingCacao:5,
+			  BeanSausage:7,
+			}
+		  },
+		},
+		"Wartortle" : {
+		  name: "Wartortle",
+		  specialty: "Ingredients",
+		  color: "blue",
+		  berry: berries['Oran'],
+		  frequency: 1500,
+		  mainSkill: "Ingredient Magnet S",
+		  evolvesTo: "Blastoise",
+		  finalEvolution: "Blastoise",
+		  ingredients: {
+			L0 : {MoomooMilk:2},
+			L30: {
+			  MoomooMilk:5,
+			  SoothingCacao:3
+			},
+			L60: {
+			  MoomooMilk:7,
+			  SoothingCacao:5,
+			  BeanSausage:7,
+			}
+		  },
+		},
+		"Blastoise" : {
+		  name: "Blastoise",
+		  specialty: "Ingredients",
+		  color: "blue",
+		  berry: berries['Oran'],
+		  frequency: 1000,
+		  mainSkill: "Energy for Everyone S",
+		  finalEvolution: "Blastoise",
+		  ingredients: {
+			L0 : {MoomooMilk:2},
+			L30: {
+			  MoomooMilk:5,
+			  SoothingCacao:3
+			},
+			L60: {
+			  MoomooMilk:7,
+			  SoothingCacao:5,
+			  BeanSausage:7,
+			}
+		  },
+		},
+		"Pikachu" : {
+		  name: "Pikachu",
+		  specialty: "Berries",
+		  color: "gold",
+		  berry: berries['Grepa'],
+		  frequency: 1200,
+		  mainSkill: "Charge Strength S",
+		  evolvesTo: "Raichu",
+		  finalEvolution: "Raichu",
+		  ingredients: {
+			L0 : {FancyApple:1},
+			L30: {
+			  FancyApple:2,
+			  WarmingGinger:2
+			},
+			L60: {
+			  FancyApple:4,
+			  WarmingGinger:3,
+			  FancyEgg:3,
+			}
+		  },
+		},
+		  "Raichu" : {
+		  name: "Raichu",
+		  specialty: "Berries",
+		  color: "gold",
+		  berry: berries['Grepa'],
+		  frequency: 800,
+		  mainSkill: "Charge Strength S",
+		  finalEvolution: "Raichu",
+		  ingredients: {
+			L0 : {FancyApple:1},
+			L30: {
+			  FancyApple:2,
+			  WarmingGinger:2
+			},
+			L60: {
+			  FancyApple:4,
+			  WarmingGinger:3,
+			  FancyEgg:3,
+			}
+		  },
+		},
+	  };
+	  var bedTime = 60*60*16;
+	  var sleeping = false;
+	  var wakeTime = 60*60*24;
+	  
+	  function makePokemon(pokemonName,level,nature,level30ing,level60ing,mainSkillLevel,sub1,sub2,sub3,sub4,sub5){
+		//Figure out a way to Maximize
+		this.name = pokemonName.name;
+		this.level = level;
+		this.specialty = pokemonName.specialty;
+		this.mainSkill = pokemonName.mainSkill;
+		this.mainSkillLevel = mainSkillLevel
+		this.evolvesTo = pokemon[pokemonName.evolvesTo]
+		this.finalEvolution = pokemon[pokemonName.finalEvolution];
+		this.ingredients = {};
+		this.tierPool = ['L0'];
+		if (this.level >= 30) {this.tierPool.push('L30')};
+		if (this.level >= 60) {this.tierPool.push('L60')};
+		this.ingredients['L0'] = pokemonName.ingredients['L0'];
+		this.ingredients['L30'] = {[level30ing] : pokemonName.ingredients['L30'][level30ing]};
+		this.ingredients['L60'] = {[level60ing] : pokemonName.ingredients['L60'][level60ing]};
+		this.berry = pokemonName.berry;
+		this.energy = 100;
+		this.color = pokemonName.color || 'grey';
+		this.grossResources = 0;
+		this.nextHelpTime = 10;
+		this.frequency = pokemonName.frequency;
+		this.skillStalled = false;
+		this.adjustEnergy = function(energyChange){
+			this.energy += energyChange;
+			if(this.energy < 0){
+			  this.energy = 0;
+			}
+			return this.energy;
+		}
+		this.help = function(){
+			let helpPower = 1;
+			let coinFlip = Math.floor(Math.random() *2);
+			//flip a coin to see if it is ingredients or berries
+			//TODO: weight for ingredient finder sub skill
+			if (coinFlip === 0) {
+				helpPower = this.berry+this.level;
+				//TODO: berry finder sub skill
+				if (this.specialty == "Berries"){
+					helpPower += this.berry+this.level;
+				}
+			} else {
+			   let tierPick = this.tierPool[Math.floor(Math.random() * this.tierPool.length)];
+			   let nameOfIng = Object.keys(this.ingredients[tierPick])[0];
+			   let countOfIng = this.ingredients[tierPick][nameOfIng];
+			   helpPower = ingredients[nameOfIng]*countOfIng;
+			}
+			this.grossResources += helpPower;
+			let skillCheck = Math.random() *100;
+			//10% chance to hit skill
+			//Overnight, skills will stall once they trigger once and will not reset til you wake up.
+			if (skillCheck < 5 || this.skillStalled == true){
+				//Since the skills don't actually trigger til morning, this saves your success until then
+				//This is especially important so that your energy overcaps in the morning for energy skills
+				if (sleeping) {
+					this.stillStalled = true;
+					
+				} else {
+					this.skillStalled = false;
+					//TODO Charge Energy S
+					//TODO Charge Strength S
+					//TODO Charge Strength M*
+					//TODO Charge Strength S - Var
+					//TODO Cooking Power-Up S*
+					//TODO Dream Shard Magnet S*
+					//TODO Dream Shard Magnet S - Var*
+					//TODO Energizing Cheer S*
+					//TODO Energy for Everyone S*
+					if (this.mainSkill == 'Energy for Everyone S'){
+						let skillLevels= [5,7,9,11,15,18]
+						for(i in team){
+							team[i].adjustEnergy(skillLevels[mainSkillLevel-1]);
+						}
+					}
+				//TODO Extra Helpful S*
+				//TODO Ingredient Magnet S
+				//TODO Metronome
+				};
+				
+				
+			}
+			return this.grossResources;
+		}
+		
+		team.push(this);
+	  }
+	
+	  const ctx = document.getElementById('myChart');
+	  const ctx2 = document.getElementById('myChart2');
+
+	const myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+		  labels: [],
+		  datasets: []
+		},
+		options: {
+		  scales: {
+		    y1: {
+			  position: 'left',
+			  type: 'linear',
+			  display: true,
+			  beginAtZero: true,
+			  grid: {
+				drawOnChartArea: false // only want the grid lines for one axis to show up
+			  },
+			},
+			y2:{
+			  position: 'right',
+			  type: 'linear',
+			  display: true,
+			  beginAtZero: true,
+			  grid: {
+			    drawOnChartArea: false // only want the grid lines for one axis to show up
+			  }
+			}
+		  }
+		}
+	  });
+	  
+	const myChart2 = new Chart(ctx2, {
+		type: 'line',
+		data: {
+		  labels: [],
+		  datasets: []
+		},
+		options: {
+		  scales: {
+		    y1: {
+			  position: 'left',
+			  type: 'linear',
+			  display: true,
+			  beginAtZero: true,
+			  grid: {
+				drawOnChartArea: false // only want the grid lines for one axis to show up
+			  },
+			},
+			y2:{
+			  position: 'right',
+			  type: 'linear',
+			  display: true,
+			  beginAtZero: true,
+			  grid: {
+			    drawOnChartArea: false // only want the grid lines for one axis to show up
+			  }
+			}
+		  }
+		}
+	  });
+	  
+
+
+      const time = [];
+      const energy = [[],[],[],[],[]];
+	  const resources = [[],[],[],[],[]]
+	  const runDays = 6+(2/3);
+	  const runTil = 60*60*24*runDays;
+	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
+	   //300 = .5 hours, 600 = 1 hour, 2400 = 4 hours.
+		const updateRate = 2400;	
+	  new makePokemon(pokemon["Blastoise"], 60, "bashful", "SoothingCacao","SoothingCacao",6);
+		new makePokemon(pokemon["Squirtle"], 60, "bashful", "SoothingCacao","BeanSausage",1);
+		new makePokemon(pokemon["Wartortle"], 60, "bashful", "MoomooMilk","MoomooMilk",1);		
+		new makePokemon(pokemon["Pikachu"], 60, "bashful", "FancyApple", "FancyApple",1);
+		new makePokemon(pokemon["Raichu"], 60, "bashful", "WarmingGinger", "FancyEgg",1);
+      function buildData() {
+
+		
+		//TODO: Replace this with in-browser dropdowns
+		
+
+		//Run for a full week
+		
+
+		var seconds = 0;
+		
+		while(seconds < runTil){
+		
+
+			//Loop through whole team
+			for(i in team){
+			  var teamPlace = team.indexOf(team[i]);
+			  
+			  if (seconds == team[i].nextHelpTime){
+				  let energyFactor = Math.min(team[i].energy, 1.5);
+			      let nextHelpDelay = Math.round(team[i].frequency / (1+(1.5*energyFactor/100)));
+				  
+				  team[i].nextHelpTime = team[i].nextHelpTime + nextHelpDelay;
+				  //console.log(team[i].name + teamPlace+" will help in " + nextHelpDelay + ' sec, at '+team[i].nextHelpTime);
+				  team[i].help();
+			  }
+
+			  //restore energy to 100 at start of every day
+			  if (seconds % (24*60*60) == 0){
+			  
+				team[i].energy = 100;
+				
+			  }
+			  //reduce energy by 1 every 10 minutes
+			  if(seconds > 0 && seconds % 600 == 0) {team[i].adjustEnergy(-1);};
+			  
+			  //Log enegy and resources values once per team member
+			  if(seconds % (updateRate) == 0 ){ 
+			    energy[teamPlace].push(parseInt(team[i].energy));
+				resources[teamPlace].push(parseInt(team[i].grossResources));
+				
+			  }			  
+			}
+			//Only log time axis increment once per whole time
+			if(seconds % (updateRate) == 0 ){ time.push(parseInt(seconds));};
+			if(seconds == bedTime) {
+				sleeping = true;
+				bedTime = bedTime + (60*60*24);				
+			}
+			if(seconds == wakeTime) {
+				sleeping = false;
+				wakeTime = wakeTime + (60*60*24);
+			}
+			seconds = seconds+1;
+		};
+		
+      }
+	  
+
+	 buildData();
+	 
+	 for(i in team){
+		 var teamPlace = team.indexOf(team[i]);
+		 myChart.data.datasets.push({
+			 label: team[i].name+' Energy',
+			 data: energy[teamPlace],
+			 fill: false,
+			 borderColor: team[i].color,
+			 backgroundColor: team[i].color,
+			 borderWidth: 1,
+			 pointRadius: 0,
+
+		});
+		myChart2.data.datasets.push({
+		  	 label: team[i].name+' Resources',
+			 data: resources[teamPlace],
+			 fill: false,
+			 borderColor: team[i].color,
+			 backgroundColor: team[i].color,
+			 borderWidth: 1,
+			 pointRadius: 0,
+
+		})
+	
+	}
+	
+	myChart.data.labels = time;
+	myChart2.data.labels = time;
+	myChart.update();
+	myChart2.update();
+	console.log(team[0].name+":\t"+team[0].grossResources +"\n"+ team[1].name+":\t"+team[1].grossResources +"\n"+team[2].name+":\t"+team[2].grossResources+"\n"+team[3].name+":\t"+team[3].grossResources +"\n"+team[4].name+":\t"+team[4].grossResources +"\n="+ (team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources));
+	
+	console.log(Math.round((team[0].grossResources+team[1].grossResources+team[2].grossResources+team[3].grossResources+team[4].grossResources)/runDays) + " resources per day");
+    </script>
+  </body>
+</html>
