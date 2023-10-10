@@ -46,9 +46,12 @@
 			width: 100%;
 		}
 	</style>
+	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3101343740930282"
+     crossorigin="anonymous"></script>
   </head>
   <body>
     <h1>Pokemon Sleep Power Simulator</h1>
+	<h2>Alpha / Proof of Concept</h2>
 	<p>Input the details of multiple pokemon to compare them, or see how they synergize as a team</p>
 		<div class="parent">
 			<div class="team" id="team1">
@@ -150,9 +153,9 @@
 		</div>
 		<div class="parent">
 			<div class="options" id="opt1">
-				<label>TBD:</label> 
+				<label>Island:</label> 
 					<select class="optionPicklist" id="optP1">  
-					<option value="TBD">TBD</option>
+					<option value="false" selected='selected'>Not yet implemented.</option>
 					</select>
 			</div>
 			<div class="options" id="opt2">
@@ -180,11 +183,13 @@
 			<div class="options" id="opt4">
 				<label>Maximize:</label> 
 					<select class="optionPicklist" id="optP4">  
+						<option value="false" selected='selected'>Not yet implemented.</option>
 					</select>
 			</div>
 			<div class="options" id="opt5">
 				<label>Option 5:</label> 
-					<select class="optionPicklist" id="optP5">  
+					<select class="optionPicklist" id="optP5"> 
+						<option value="false" selected='selected'>Not yet implemented.</option>					
 					</select>
 			</div>
 		</div>
@@ -865,7 +870,8 @@
 	
 	
 	  
-	  //TODO:replace all this junk with dropdowns
+	  //TODO: Make the updateRate set itself to 1x/day if 1000 days is chosen. 
+	  //TODO: Make the Days set itself to 1 if Graph Detail Level 1sec is chosen
 	  var runDays = parseInt(opt2.options[opt2.selectedIndex].value);
 	  var runTil = 60*60*24*runDays;
 	   //updateRate determines granularity of the graph. Bigger number = fewer x-axis ticks.
@@ -898,7 +904,7 @@
 			  //restore energy to 100 at start of every day
 			  if (seconds % (24*60*60) == 0){
 			  
-				team[i].energy = 100;
+				team[i].energy = Math.max(100, team[i].energy);
 				
 			  }
 			  //reduce energy by 1 every 10 minutes
@@ -1019,7 +1025,71 @@
 	});
     
 	</script>
-	<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3101343740930282"
-     crossorigin="anonymous"></script>
+
+	<h3>Notes:</h3>
+	<ul>
+		<li><u>Player Behaviour</u></li>
+		<ul>
+			<li>Assumes the player is constantly checking on their team and taps any pokemon that have a help ready, except during sleep session.</li>
+			<li>Assumes a single 8-hour sleep session for the purposes of downtime</li>
+		</ul>
+		<li><u>Energy</u></li>
+		<ul>
+			<li>Team energy raised to 100% after sleep session. If higher than 100%, left alone.</li>
+			<li>No upper cap on energy from skills.</li>
+		</ul>
+		<li><u>Berries</u></li>
+		<ul>
+			<li>Sneaky snacking bug(?) that gives more power than the berries are normally worth is not implemented</li>
+			<li>Assumes a 50% chance when helping of choose Berry instead of Ingredient</li>
+		</ul>
+		<li><u>Ingredients</u></li>
+		<ul>
+			<li>Assumes a 50% chance when helping of choose Berry instead of Ingredient</li>
+			<li>Assumes all ingredients are spent on recipies</li>
+			<li>Uses base ingredient value</li>
+		</ul>
+		<li><u>Skills</u></li>
+		<ul>
+			<li>Assumes 20% chance per help to trigger main skill.</li>
+			<li>If a skill triggers during the 8 hour sleep period, 1 trigger is held as ready and will trigger when the player wakes up.</li>
+		</ul>
+		<li><u>Natures</u></li>
+		<ul>
+			<li>Only Skill Chance, Energy Recovery, and Speed of Help currently have any effect in this tool.</li>
+			<li></li>
+		</ul>
+
+
+		</ul>
+	<h3>To-do list:</h3>
+	<ul>
+		<li><b>Natures</b> - Fill in nature option dropdown. Already works at a code level.</li>
+		<li><b>Sub Skills</b> - Everything.</li>
+		<li><b>Pokemon Level</b> - Add level selectors.</li>
+		<li><b>Favored Berries</b> - Add option to select up to 3 favored berries for 2x power.</li>
+		<li><b>Ingredient Natures</b> - Add +/- effects of Ingredient Finding natures.</li>
+		<li><b>Other Natures?</b> - Determine if any other natures are worth implementing.</li>
+		<li><b>Recipe Strength</b> - Give some, but not all, ingredients a scaled factor based on an "average recipe level" dropdown option to be implemented.</li>
+		<li><b>Cooking Pot</b> - Provide a warning if the team comp will generate more ingredients than the player can spend through cooking.</li>
+		<li><b>Skill Chance</b> - Add option to set a global base skill chance or a unit-by-unit skill chance. This is to allow testing using different assumptions, as there is incomplete data on the skill behavior. </li>
+		<li><b>Berry vs Ingredient chance</b> - Add option to set Berry/Ingredient global base chance or unit by unit base chance. This is to allow testing using different assumptions, as there is incomplete data on the skill behavior. </li>
+		<li><b>Check-in timer</b> - Add an output that lets you know the fastest your pokemon's inventory will fill up so you can avoid ever missing a trigger.</li>
+		<li><b>Inventory</b> - Everything related to pokemon inventory.</li>
+		<li><b>Island Chooser</b> - Add an island option</li>
+		<li><b>Snorlax Rating</b> - Display what rating your Snorlax will be at the end of the week. Requires Island Chooser.</li>
+		<li><b>Pokemon & Sleep Style Calendar</b> - Show on which day you will unlock different species & styles based on projected power growth.</li>
+		<li><b>Island Power</b> - Add island power option.</li>
+		<li><b>Maximize!</b> - Power up all pokemon to 50, upgrade all skills to max level, upgrade all sub skills</li>
+		<li><b>Candy</b> - Estimate candy cost til next meaningful breakpoint for your team members.</li>
+		<li><b>Implement more species!!!</b> - The way I'm doing this is very tedious, because I'm an idiot. Please be patient. 
+		
+	</ul>
+	<h4>Questions:</h4>
+	<ul>
+		<li>Can Growlithe skill trigger other skills or just help?</li>
+		<li>If a pokemon's inventory is full, are all further helps converted to berries, or are ingredient helps lost?</li>
+		<li>Is the current behavior of Secret Snacking a bug or intended, and how does it actually work?</li>
+	</ul>
   </body>
 </html>
