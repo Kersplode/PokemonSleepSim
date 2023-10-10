@@ -13,7 +13,7 @@
 		}
 		.team{
 			width: 20pc;
-			height: 100px;
+			//height: 100px;
 			border-color: black;
 			border-width: 1px;
 			border-style: solid;
@@ -54,28 +54,98 @@
 			<div class="team" id="team1">
 				<label>Team Member 1:</label> 
 					<select class="teamPicklist" id="teamP1">  
-					</select>
+					</select><p/>
+				<label>Nature:</label> 
+					<select class="naturePicklist" id="natureP1">  
+					</select><p/>
+				<label>Level 30 Ingredient:</label> 
+					<select class="ing30PickList" id="ing30P1">  
+						<option value="MoomooMilk" selected='selected' id='ing30P1T2C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing30P1T2C2'>MoomooMilk</option>
+					</select><p/>
+				<label>Level 60 Ingredient:</label> 
+					<select class="ing60PickList" id="ing60P1">  
+						<option value="MoomooMilk" selected='selected' id='ing60P1T3C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P1T3C2'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P1T3C3'>MoomooMilk</option>
+					</select><p/>
 			</div>
 			<div class="team" id="team2">
 				<label>Team Member 2:</label> 
 					<select class="teamPicklist" id="teamP2">  
-					</select>
+					</select><p/>
+				<label>Nature:</label> 
+					<select class="naturePicklist" id="natureP2">  
+					</select><p/>
+				<label>Level 30 Ingredient:</label> 
+					<select class="ing30PickList" id="ing30P2">  
+						<option value="MoomooMilk" selected='selected' id='ing30P2T2C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing30P2T2C2'>MoomooMilk</option>
+					</select><p/>
+				<label>Level 60 Ingredient:</label> 
+					<select class="ing60PickList" id="ing60P2">  
+						<option value="MoomooMilk" selected='selected' id='ing60P2T3C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P2T3C2'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P2T3C3'>MoomooMilk</option>
+					</select><p/>
 			</div>
 				
 			<div class="team" id="team3">
 				<label>Team Member 3:</label> 
 					<select class="teamPicklist" id="teamP3">  
-					</select>
+					</select><p/>
+				<label>Nature:</label> 
+					<select class="naturePicklist" id="natureP3">  
+					</select><p/>
+				<label>Level 30 Ingredient:</label> 
+					<select class="ing30PickList" id="ing30P3">  
+						<option value="MoomooMilk" selected='selected' id='ing30P3T2C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing30P3T2C2'>MoomooMilk</option>
+					</select><p/>
+				<label>Level 60 Ingredient:</label> 
+					<select class="ing60PickList" id="ing60P3">  
+						<option value="MoomooMilk" selected='selected' id='ing60P3T3C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P3T3C2'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P3T3C3'>MoomooMilk</option>
+					</select><p/>
 			</div>
 			<div class="team" id="team4">
 				<label>Team Member 4:</label> 
 					<select class="teamPicklist" id="teamP4">  
-					</select>
+					</select><p/>
+				<label>Nature:</label> 
+					<select class="naturePicklist" id="natureP4">  
+					</select><p/>
+				<label>Level 30 Ingredient:</label> 
+					<select class="ing30PickList" id="ing30P4">  
+						<option value="MoomooMilk" selected='selected' id='ing30P4T2C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing30P4T2C2'>MoomooMilk</option>
+					</select><p/>
+				<label>Level 60 Ingredient:</label> 
+					<select class="ing60PickList" id="ing60P4">  
+						<option value="MoomooMilk" selected='selected' id='ing60P4T3C1'>Moomoo Milk</option>
+						<option value="MoomooMilk" id='ing60P4T3C2'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P4T3C3'>MoomooMilk</option>
+					</select><p/>
 			</div>
 			<div class="team" id="team5">
 				<label>Team Member 5:</label> 
 					<select class="teamPicklist" id="teamP5">  
-					</select>
+					</select><p/>
+				<label>Nature:</label> 
+					<select class="naturePicklist" id="natureP5">  
+					</select><p/>
+				<label>Level 30 Ingredient:</label> 
+					<select class="ing30PickList" id="ing30P5">  
+						<option value="MoomooMilk" selected='selected' id='ing30P5T2C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing30P5T2C2'>MoomooMilk</option>
+					</select><p/>
+				<label>Level 60 Ingredient:</label> 
+					<select class="ing60PickList" id="ing60P5">  
+						<option value="MoomooMilk" selected='selected' id='ing60P5T3C1'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P5T3C2'>MoomooMilk</option>
+						<option value="MoomooMilk" id='ing60P5T3C3'>MoomooMilk</option>
+					</select><p/>
 			</div>
 		</div>
 		<div class="parent">
@@ -144,7 +214,7 @@
 	   SlowpokeTail : 342,
 	  };
 	  
-	const ingMagPool = {
+	  const ingMagPool = {
 	   FancyApple : true,
 	   MoomooMilk : true,
 	   GreengrassSoybeans : false,
@@ -486,14 +556,14 @@
 
 	  };
 	  
-	  //Puts all the pokemon in the dropdowns
-	  function createOption(option, label) {
+	//Puts all the pokemon in the dropdowns
+	function createOption(option, label) {
 		  var option = document.createElement("option");
 		  option.setAttribute("value", label);
 		  option.innerHTML = label;
 		  return option;
 	  }
-	  function buildDropDowns() {
+	function buildDropDowns() {
 		var selections = document.getElementsByClassName('teamPicklist');
 		console.log(selections);
 		for(var i=0; i<selections.length; i++) {
@@ -502,6 +572,24 @@
 			selections[i].options.add(createOption(JSON.stringify(pokemon[j]['name']), pokemon[j]['name']));
 		  }
 		}
+	}
+	//Updates the ingredients when pokemon change
+	function updateIngDropDown(pokemonName, slot){
+		let selectT2C1 = document.getElementById('ing30P'+slot+'T2C1');
+		let selectT2C2 = document.getElementById('ing30P'+slot+'T2C2');
+		let selectT3C1 = document.getElementById('ing60P'+slot+'T3C1');
+		let selectT3C2 = document.getElementById('ing60P'+slot+'T3C2');
+		let selectT3C3 = document.getElementById('ing60P'+slot+'T3C3');
+		selectT2C1.innerHTML = Object.keys(pokemon[pokemonName].ingredients['L30'])[0];
+		selectT2C1.value = Object.keys(pokemon[pokemonName].ingredients['L30'])[0];
+		selectT2C2.innerHTML = Object.keys(pokemon[pokemonName].ingredients['L30'])[1];
+		selectT2C2.value = Object.keys(pokemon[pokemonName].ingredients['L30'])[1];
+		selectT3C1.innerHTML = Object.keys(pokemon[pokemonName].ingredients['L60'])[0];
+		selectT3C1.value = Object.keys(pokemon[pokemonName].ingredients['L60'])[0];
+		selectT3C2.innerHTML = Object.keys(pokemon[pokemonName].ingredients['L60'])[1];
+		selectT3C2.value = Object.keys(pokemon[pokemonName].ingredients['L60'])[1];
+		selectT3C3.innerHTML = Object.keys(pokemon[pokemonName].ingredients['L60'])[2];
+		selectT3C3.value = Object.keys(pokemon[pokemonName].ingredients['L60'])[2];
 	}
 	  
 	  buildDropDowns();
@@ -740,11 +828,11 @@
 	function makeTeam(){
 		team = [];
 		teamSlot = 1;
-	    new makePokemon(pokemon[member1.options[member1.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
-		new makePokemon(pokemon[member1.options[member2.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
-		new makePokemon(pokemon[member1.options[member3.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
-		new makePokemon(pokemon[member1.options[member4.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6);
-		new makePokemon(pokemon[member1.options[member5.selectedIndex].value], 30, natures["Bashful"], "MoomooMilk", "MoomooMilk",6)
+	    new makePokemon(pokemon[t1Picker.options[t1Picker.selectedIndex].value], 30, natures["Bashful"], t1T2Picker.options[t1T2Picker.selectedIndex].value, t1T3Picker.options[t1T3Picker.selectedIndex].value,1);
+		new makePokemon(pokemon[t1Picker.options[t2Picker.selectedIndex].value], 30, natures["Bashful"], t2T2Picker.options[t2T2Picker.selectedIndex].value, t2T3Picker.options[t2T3Picker.selectedIndex].value,1);
+		new makePokemon(pokemon[t1Picker.options[t3Picker.selectedIndex].value], 30, natures["Bashful"], t3T2Picker.options[t3T2Picker.selectedIndex].value, t3T3Picker.options[t3T3Picker.selectedIndex].value,1);
+		new makePokemon(pokemon[t1Picker.options[t4Picker.selectedIndex].value], 30, natures["Bashful"], t4T2Picker.options[t4T2Picker.selectedIndex].value, t4T3Picker.options[t4T3Picker.selectedIndex].value,1);
+		new makePokemon(pokemon[t1Picker.options[t5Picker.selectedIndex].value], 30, natures["Bashful"], t5T2Picker.options[t5T2Picker.selectedIndex].value, t5T3Picker.options[t5T3Picker.selectedIndex].value,1)
 	}
 	
       var time = [];
@@ -754,11 +842,21 @@
 	var totalResources = 0;
 		
 	const runButton = document.getElementById('runButton');
-	const member1 = document.getElementById('teamP1');  
-	const member2 = document.getElementById('teamP2');  
-	const member3 = document.getElementById('teamP3');  
-	const member4 = document.getElementById('teamP4');  
-	const member5 = document.getElementById('teamP5');  
+	const t1Picker = document.getElementById('teamP1');
+	const t2Picker = document.getElementById('teamP2');
+	const t3Picker = document.getElementById('teamP3');
+	const t4Picker = document.getElementById('teamP4');
+	const t5Picker = document.getElementById('teamP5');
+	const t1T2Picker = document.getElementById('ing30P1');  
+	const t1T3Picker = document.getElementById('ing60P1');  
+	const t2T2Picker = document.getElementById('ing30P2');  
+	const t2T3Picker = document.getElementById('ing60P2'); 
+	const t3T2Picker = document.getElementById('ing30P3');  
+	const t3T3Picker = document.getElementById('ing60P3'); 
+	const t4T2Picker = document.getElementById('ing30P4');  
+	const t4T3Picker = document.getElementById('ing60P4'); 
+	const t5T2Picker = document.getElementById('ing30P5');  
+	const t5T3Picker = document.getElementById('ing60P5'); 
 	const opt1 = document.getElementById('optP1');  
 	const opt2 = document.getElementById('optP2');  
 	const opt3 = document.getElementById('optP3');  
@@ -877,7 +975,6 @@
 	};
 
 
-
 	runButton.addEventListener('click', function(){
 		 bedTime = 60*60*16;
 	     sleeping = false;
@@ -905,6 +1002,22 @@
 		console.log("need to spend "+Math.round((ingredientBag/runDays)/3)+" ingredients per meal. Does not account for Sundays.");
 	});
 	
-    </script>
+	t1Picker.addEventListener("change", function(){
+		updateIngDropDown(t1Picker.value, 1);
+	});
+	t2Picker.addEventListener("change", function(){
+		updateIngDropDown(t2Picker.value, 2);
+	});
+	t3Picker.addEventListener("change", function(){
+		updateIngDropDown(t3Picker.value, 3);
+	});
+	t4Picker.addEventListener("change", function(){
+		updateIngDropDown(t4Picker.value, 4);
+	});
+	t5Picker.addEventListener("change", function(){
+		updateIngDropDown(t5Picker.value, 5);
+	});
+    
+	</script>
   </body>
 </html>
